@@ -3,7 +3,7 @@
  * <p>
  * FastDFS Java Client may be copied only under the terms of the GNU Lesser
  * General Public License (LGPL).
- * Please visit the FastDFS Home Page http://www.csource.org/ for more detail.
+ * Please visit the FastDFS Home Page https://github.com/happyfish100/fastdfs for more detail.
  */
 
 package org.csource.fastdfs;
@@ -77,5 +77,37 @@ public class TrackerServer {
 
   protected void finalize() throws Throwable {
     this.close();
+  }
+
+  public boolean isConnected(){
+    boolean isConnected = false;
+    if (sock != null) {
+      if (sock.isConnected()) {
+        isConnected = true;
+      }
+    }
+    return isConnected;
+  }
+
+  public boolean isAvaliable() {
+    if (isConnected()) {
+      if (sock.getPort() == 0) {
+        return false;
+      }
+      if (sock.getInetAddress() == null) {
+        return false;
+      }
+      if (sock.getRemoteSocketAddress() == null) {
+        return false;
+      }
+      if (sock.isInputShutdown()) {
+        return false;
+      }
+      if (sock.isOutputShutdown()) {
+        return false;
+      }
+      return true;
+    }
+    return false;
   }
 }
